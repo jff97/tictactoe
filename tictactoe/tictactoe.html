@@ -9,7 +9,7 @@
 </head>
 <body>
    <div class="gameContainer">
-      <div class="gameBoard" >
+      <div id="gameBoard" >
          <div class="space" id="1,1" onclick="clickSpace(1,1)"></div>
          <div class="space" id="1,2" onclick="clickSpace(1,2)"></div>
          <div class="space" id="1,3" onclick="clickSpace(1,3)"></div>
@@ -20,8 +20,10 @@
          <div class="space" id="3,2" onclick="clickSpace(3,2)"></div>
          <div class="space" id="3,3" onclick="clickSpace(3,3)"></div>
       </div>
-      <div class="inputBoard">
-
+      <div class="infoBoard">
+         <div class="gameToggle" id="startGame" onclick="gameStart()">Start Game</div>
+         <div class="gameToggle"  id="endGame" onclick="gameEnd()">End Game</div>
+         <div id="turnDisplay"></div>
       </div>
    </div>
    <script src="tictaclogic.js">TODO</script>
