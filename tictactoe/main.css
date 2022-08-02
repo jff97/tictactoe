@@ -1,0 +1,14 @@
+.gameBoard {
+   display: flex;
+   flex-direction: row;
+   flex-wrap: wrap;
+   justify-content: space-around;
+   background-color: red;
+   width: 500px;
+   height: 500px;
+}
+.space {
+   width: 30%;
+   height: 30%;
+   background-color: blue;
+}
