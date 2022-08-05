@@ -9,6 +9,7 @@
 </head>
 <body>
    <div id="gameContainer">
+      <div id="spaceFix"></div>
       <div id="gameBoard" >
          <div class="space" id="0,0" onclick="clickSpace(0,0)"></div>
          <div class="space" id="0,1" onclick="clickSpace(0,1)"></div>
@@ -21,10 +22,12 @@
          <div class="space" id="2,2" onclick="clickSpace(2,2)"></div>
       </div>
       <div id="infoBox">
+         <div id="spaceFix">.</div>
          <div id="startEndContainer">
             <div class="gameToggle" id="startGame" onclick="gameStart()">Start Game</div>
          </div>
          <div id="turnContainer"></div>
+         <div id="gameOverContainer"></div>
       </div>
    </div>
    <script src="tictaclogic.js">TODO</script>
