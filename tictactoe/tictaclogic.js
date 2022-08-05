@@ -67,10 +67,27 @@ function displayTurn() {
    let turnDisplay = document.createElement("div");
    turnDisplay.id = 'turnDisplay';
    const playerNumber = tictactoe.turn + 1;
-   const toDisplay = "Player " + playerNumber + "'s turn";
-   turnDisplay.innerHTML = toDisplay;
+   const toDisplay = " aka player " + playerNumber + " is up";
+
+   let words = document.createElement("div");
+   words.innerHTML = toDisplay;
+   words.id = "words";
+   let playerPiece = getPlayerPiece();
+   turnDisplay.appendChild(playerPiece);
+   turnDisplay.appendChild(words);
+   //turnDisplay.innerHTML = toDisplay;
    let turnContainer = document.getElementById("turnContainer");
    turnContainer.appendChild(turnDisplay);
+}
+function getPlayerPiece() {
+   let playerPiece = document.createElement("img");
+   playerPiece.id = "playerPiece";
+   if (tictactoe.turn == 0) {
+      playerPiece.src = "assets/circle.png";
+   } else {
+      playerPiece.src = "assets/x.png";
+   }
+   return playerPiece;
 }
 function clickSpace(xCoord, yCoord) {
    const curID = xCoord + "," + yCoord;
@@ -211,7 +228,7 @@ function checkWin(x, y, player) {
    return typeStatus;
 }
 function displayGameOver(x, y, winStatus, turn, type) {
-   let infoBox = document.getElementById("infoBox");
+   
    let gameOverBox = document.createElement("div");
    let playerNumber = turn + 1;
    if (type === "draw") {
@@ -220,7 +237,8 @@ function displayGameOver(x, y, winStatus, turn, type) {
       gameOverBox.innerHTML = "Game Over Player " + playerNumber + " wins";
    }
    gameOverBox.id = 'gameOver';
-   infoBox.appendChild(gameOverBox);
+   let gameOverContainer = document.getElementById("gameOverContainer");
+   gameOverContainer.appendChild(gameOverBox);
 
    
    if (winStatus[1]) {
