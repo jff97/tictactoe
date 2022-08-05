@@ -3,21 +3,32 @@ let tictactoe = null;
 
 //this function gets called by the start game button
 function gameStart() {
-   let boardSize = 3;
-   let elements = document.getElementsByClassName("space");
-   for (let i = 0; i < elements.length; i++) {
-      elements[i].style.display = "block";
-      elements[i].style.pointerEvents = "auto";
-   }
+   console.log("game start");
    //instantiate the game object
    if (tictactoe == null) {
+      let boardSize = 3;
+      let elements = document.getElementsByClassName("space");
+      for (let i = 0; i < elements.length; i++) {
+         elements[i].style.display = "block";
+         elements[i].style.pointerEvents = "auto";
+      }
       tictactoe = new Game(boardSize);
       displayTurn();
-   }
+
+      document.getElementById("startGame").remove();
+      let endButton = document.createElement("div");
+      endButton.className = "gameToggle";
+      endButton.id = "endGame";
+      endButton.setAttribute("onclick", "gameEnd();");
+      endButton.innerHTML = "End Game";
+      let container = document.getElementById("startEndContainer");
+      container.appendChild(endButton);
+   } 
 }
 
 //this function gets called by the end game button
 function gameEnd() {
+   console.log("game end");
    if (tictactoe != null) {
       let elements = document.getElementsByClassName("space");
       for (let i = 0; i < elements.length; i++) {
@@ -39,7 +50,17 @@ function gameEnd() {
             curSpace.style.display = "none";
          }
       }
+      //<div class="gameToggle" id="startGame" onclick="gameStart()">Start Game</div>
       tictactoe = null;
+
+      document.getElementById("endGame").remove();
+      let startButton = document.createElement("div");
+      startButton.className = 'gameToggle';
+      startButton.id = 'startGame';
+      startButton.setAttribute("onclick", "gameStart();");
+      startButton.innerHTML = "Start Game"
+      let container = document.getElementById("startEndContainer");
+      container.appendChild(startButton);
    }
 }
 function displayTurn() {
@@ -57,14 +78,18 @@ function clickSpace(xCoord, yCoord) {
    if (!tictactoe.gameOver) {
       if (tictactoe.grid[xCoord][yCoord].full == false) {
          //the space is empty so update Board
+         tictactoe.placedMarks++;
          updateBoard(xCoord, yCoord, tictactoe.turn);
          updateBoardDisplay(xCoord, yCoord, tictactoe.turn);
          let winStatus = checkWin(xCoord, yCoord, tictactoe.turn);
          if (winStatus[0]) {
             //then somebody won
-            alert("somebody Won");
             tictactoe.gameOver = true;
-            displayGameOver(xCoord, yCoord, winStatus, tictactoe.turn);
+            displayGameOver(xCoord, yCoord, winStatus, tictactoe.turn, "win");
+         } else if (tictactoe.placedMarks == 9) {
+            //there was a draw
+            tictactoe.gameOver = true;
+            displayGameOver(xCoord, yCoord, winStatus, tictactoe.turn, "draw");
          } else {
             //nobody won so change the turn
             tictactoe.turn = (tictactoe.turn + 1)% 2;
@@ -185,24 +210,54 @@ function checkWin(x, y, player) {
    }
    return typeStatus;
 }
-function displayGameOver(x, y, winStatus, turn) {
+function displayGameOver(x, y, winStatus, turn, type) {
    let infoBox = document.getElementById("infoBox");
    let gameOverBox = document.createElement("div");
    let playerNumber = turn + 1;
-   gameOverBox.innerHTML = "Game Over Player " + playerNumber + " wins";
+   if (type === "draw") {
+      gameOverBox.innerHTML = "Game was a draw";
+   } else {
+      gameOverBox.innerHTML = "Game Over Player " + playerNumber + " wins";
+   }
    gameOverBox.id = 'gameOver';
    infoBox.appendChild(gameOverBox);
+
+   
    if (winStatus[1]) {
       //then a win on row x happened
+      let dash = document.createElement("div");
+      dash.className = "dash";
+      dash.id = "row";
+      const curID = x + "," + "0";
+      const curSpace = document.getElementById(curID);
+      curSpace.appendChild(dash);
    }
    if (winStatus[2]) {
       //then a win on column y happened
+      let dash = document.createElement("div");
+      dash.className = "dash";
+      dash.id = "col";
+      const curID = "0" + "," + y;
+      const curSpace = document.getElementById(curID);
+      curSpace.appendChild(dash);
    }
    if (winStatus[3]) {
       //then a win on off diagonal happened
+      let dash = document.createElement("div");
+      dash.className = "dash";
+      dash.id = "offDiag";
+      const curID = "2" + "," + "0";
+      const curSpace = document.getElementById(curID);
+      curSpace.appendChild(dash);
    }
    if (winStatus[4]) {
       //then a win on main diagonal happened
+      let dash = document.createElement("div");
+      dash.className = "dash";
+      dash.id = "mainDiag";
+      const curID = "0" + "," + "0";
+      const curSpace = document.getElementById(curID);
+      curSpace.appendChild(dash);
    }
 }
 function insertImage(curSpace, player) {
@@ -225,6 +280,7 @@ class Game {
       this.boardSize = b;
       this.turn = 0;
       this.gameOver = false;
+      this.placedMarks = 0;
 
       //make every space on the board have a status of empty
       let g = new Array(b);
